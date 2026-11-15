@@ -21,8 +21,10 @@ def add_virtual_column(df: pandas.DataFrame, role: str, new_column: str) -> pand
         return pandas.DataFrame()
 
     # add virtual column
+    # backticks make pandas read every name as a column, never as a Python keyword or literal (True, and, not)
+    quoted_role = re.sub(name, lambda match: f"`{match.group()}`", role)
     df_res = df.copy()
-    df_res[new_column] = df_res.eval(role)
+    df_res[new_column] = df_res.eval(quoted_role)
     return df_res
 
     
